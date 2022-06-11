@@ -1,0 +1,1 @@
+﻿Dentro de Shared, definiremos todas las clases que utilizara el proyecto.

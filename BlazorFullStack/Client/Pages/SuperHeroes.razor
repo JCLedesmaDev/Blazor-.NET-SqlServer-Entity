@@ -1,0 +1,60 @@
+﻿@page "/superHeroes"
+@inject ISuperHeroesService SuperHeroesService
+@inject NavigationManager NavigationManager
+
+@*Le asignamos un titulo a nuestra pagina*@
+<PageTitle>Super Heroes</PageTitle>
+
+
+<h3>Super Heroes</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th> Primer Nombre </th>
+            <th> Last Name </th>
+            <th> Nombre Heroe </th>
+            <th> Comic </th>
+            <th> Acciones </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (SuperHero Heroe in SuperHeroesService.Heroes)
+        {
+            <tr>
+                <td> @Heroe.FirstName </td>
+                <td> @Heroe.LastName </td>
+                <td> @Heroe.HeroName </td>
+                <td> @Heroe?.Comic.Name </td>
+                <td>
+                    <button 
+                        class="btn btn-primary"
+                        @onclick="(() => showHero(Heroe.Id))"
+                    >
+                        <i class="oi oi-pencil"></i>
+                    </button>
+                </td>
+            </tr> 
+        }
+    </tbody>
+</table>
+
+
+@code {
+    //Aqui ejecutamos todo nuestro codigo de logica
+
+    //Apenas se carga nuestro componente, hace la peticion http para traer a todos los heroes
+    protected override async Task OnInitializedAsync()
+    {
+        await SuperHeroesService.GetSuperHeroes();
+    }
+
+
+    void showHero(int Id)
+    {
+        NavigationManager.NavigateTo($"hero/{Id}");
+    }
+
+}
+ 

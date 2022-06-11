@@ -1,0 +1,94 @@
+﻿1) Para cear una nueva pag. debemos hacer Click derecho a 
+   Pages > Razor Component
+
+
+   -------> Crear Service dentro del Front: <---------------
+
+ Creamos un ISuperHeroesService (interface de servicio) junto a un 
+ SuperHeroesServices (servicio), para  realziar todos los metodos HTTP al BE.
+
+ Para poder utilizar "ISuperHeroesService", deberemos hacer 2 cosas:
+ 1) Registraremos nuestra servicio dirigiendonos hacia:
+    Cliente > Program.css 
+    Aqui dentro, lo que deberemos hacer es registrar nuestro ISuperHeroesService
+    pero tambien aclarar cual sera la clase que implementara esa interface
+    (Es decir, SuperHeroesServices).
+
+    La linea de codigo que deberemos escribir quedaria algo como:
+    builder.Services.AddScoped<ISuperHeroesService, SuperHeroesService>();
+ 
+    Por lo que cuando querramos utilizar nuestro Service en alguna pagina .razor
+    deberemos escribir: "@inject ISuperHeroesService SuperHeroesService"
+
+    NOTA: Se hace de esta manera, debido a que cuando hicimos de nuestros servicios,
+    generamos una clase y una interface en conjunto. Caso contrario de que solo se tenga
+    una clase, deberiamos escribir algo como:
+    builder.Services.AddScoped<SuperHeroesService>();
+
+
+2) Ir a _Imports.razor y escribir: @using BlazorFullStack.Client.Services.SuperHeroes
+   Esto es con el fin de que nuestro servicio este disponible para todo el proyecto
+
+
+   -------> IActionResult y ActionResult<>: <---------------
+
+   Task<ActionResult<>>: Se utiliza para las acciones asincronas ya que
+    permite especificar que tipo de dato nos devolvera como respuesta. 
+
+    Task<IActionResult>: Devuelve los estados de respuesta de las peticiones HTTP.
+    Es decor: Status 200, 400, etc...
+ 
+
+   -------> Ciclo de vida de los componentes: <---------------
+
+Existen 3 metodos dentro del ciclo de vida:
+1) OnAfterRenderAsync(bool firstRender): 
+    Se utiliza una vez renderizado el componente
+    Nos permite saber si es la primera vez que se renderizo el componente o no.
+
+2) OnInitializedAsync(): 
+    Se utiliza cuando el componente se inicializa correctamente.
+
+3) OnParametersSetAsync(): 
+    Se ejecuta cada vez que el parametro que recibe una pagina es actualizado.
+    Nota: Cuando tenemos un @page "home/{id: int}"
+
+https://www.netmentor.es/entrada/ciclo-vida-componentes-blazor
+
+-------> Ejecucion de eventos HTML: <---------------
+
+Para hacer uso de los eventos dentro del HTML, existen 2 formas de hacerlo:
+- Especificar el nombre del metodo dentro del elemento @onClick="metodo"
+- Especificar el metodo con parametro inlcuido dentro del elemento
+  @onClick="(() => metodo())"
+  Nota: De la 2da manera, le podemos pasar parametros al metodo.
+
+-------> Navigation: <---------------
+
+Para poder hacer que un metodo nos re dirija a otro componente, debemos inyectar
+un administrador de navegacion. Por lo que escribiremos:
+@inject NavigationManager NavigationManager
+Y para ejecutar la navegacion, deberemos ejecutar dentro de una funcion lo siguiente
+NavigationManager.NavigateTo($"hero/{Id}");  
+--> En este caso, nos re dirige hacia la pagina "/hero/{Id: int}"
+
+
+-------> SQL Server: <---------------
+Instalar SQL Server Express desde:
+https://www.microsoft.com/es-es/sql-server/sql-server-downloads
+
+Una vez instalado, debemos continuar con la instalacion de los paquetes
+NuGet en nuestros proyectos
+Seleccionaremos el proyecto ".Server" > Click derecho >
+Manage NuGet Packages y buscaremos los siguientes paquetes:
+- microsoft.entityFrameworkCore
+- microsoft.entityFrameworkCore.design 
+- microsoft.entityFrameworkCore.sqlServer
+
+Tendremos que abrir la consola del administrador de paquetes yendo a
+Herramientas > Administrador de paquetes NuGet > Consola administrador de paquetes.
+con el fin de instalar el paquete de entidad
+
+
+
+1hs min 02                                                                                                                                      

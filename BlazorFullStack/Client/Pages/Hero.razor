@@ -1,0 +1,125 @@
+﻿@*
+Esta pagina tendra 2 posibles parametros
+/hero --> Para acceder a un Heroe
+/hero/{id:int} --> Para editar un Heroe y especificamos el tipo de dato del parametro.
+*@
+@page "/hero"
+@page "/hero/{IdHero:int}"
+@inject ISuperHeroesService SuperHeroesService
+
+
+
+@if (IdHero == null)
+{    
+    <PageTitle>New Hero</PageTitle>
+    <h3>Create a new Super Hero</h3>
+}else
+{
+    <PageTitle>Edit Hero</PageTitle>
+    <h3>Hero @hero.HeroName </h3>
+}
+
+@*Este componente de blazor cuenta con metodos para validar e invalidar. Investigar*@
+<EditForm Model="hero" OnSubmit="HandleSubmit">
+        @* @bind-value:
+            Vinculamos el contenido de este input con la propiedad que tiene
+            el objeto 'hero'
+        *@
+    <div>
+        <label for="firstName">Nombre</label>
+        <InputText 
+            id="firstName" 
+            @bind-Value="hero.FirstName"
+            class="form-control"
+        ></InputText>
+    </div>
+
+    <div>
+        <label for="lastName">Apellido</label>
+        <InputText 
+            id="lastName" 
+            @bind-Value="hero.LastName"
+            class="form-control"
+        ></InputText>
+    </div>
+
+    <div>
+        <label for="heroName">Nombre del Heroe</label>
+        <InputText 
+            id="heroName" 
+            @bind-Value="hero.HeroName"
+            class="form-control"
+        ></InputText>
+    </div>
+
+    <div>
+        <label for="comic">Comic</label>
+        <InputSelect @bind-Value="hero.ComicId" class="form-select">  
+            @foreach (Comic comic in SuperHeroesService.Comics)
+            {
+                <option value="@comic.Id">
+                    @comic.Name
+                </option>  
+            }
+        </InputSelect>
+    </div>
+
+    <br />
+    
+    <button type="submit" class="btn btn-primary">@btnText</button>
+
+</EditForm>
+
+
+@code {
+      /* 
+      Tomamos el parametro que le pasamos a nuestra url. 
+      El nombre de nuestra variable debe coincidir con el que se definio
+      en la linea 7.
+    */
+    [Parameter]
+    public int? IdHero { get; set; }
+
+
+    string btnText = string.Empty;
+
+
+    public SuperHero hero = new SuperHero
+    {
+        Comic = new Comic()
+    };
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IdHero == null)
+        {
+            btnText = "Guardar Heroe";
+        }
+        else
+        {
+            btnText = "Editar Heroe";            
+        }
+        await SuperHeroesService.GetComics();
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (IdHero == null)
+        {
+            // Crear un nuevo heroe
+
+        }
+        else
+        {
+            hero = await SuperHeroesService.GetOneHero((int)IdHero);
+        }
+    }
+
+
+    async Task HandleSubmit()
+    {
+        
+    }
+}
