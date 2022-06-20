@@ -28,6 +28,53 @@ Mientras que Task<ActionResult<T>>, Le especificamos que nos retornara
 datos en especifico
 Por ejem.: Task<ActionResult<List<SuperHero>>>.
 
+   Task<ActionResult<>>: Se utiliza para las acciones asincronas ya que
+    permite especificar que tipo de dato nos devolvera como respuesta. 
+
+    Task<IActionResult>: Devuelve los estados de respuesta de las peticiones HTTP.
+    Es decor: Status 200, 400, etc...
+
 
 https://www.youtube.com/watch?v=K_P-qJj_8Bg&t=3003s
-Min 19.00
+
+(NOTA: Una vez que hayamos hecho todo lo relacionado a la creacion de 
+entidades y de tablas del DbContext)
+4) Para poder utilizar nuestra Base de Datos dentro de un controller, 
+debemos inicializar dentro del constructor de nuestro controller, 
+la clase del DbContext escribiendo el siguiente codigo:
+    private readonly BaseDatosContext _context;
+    public SuperHeroController(BaseDatosContext BaseDatosContext)
+    {
+        this._context = BaseDatosContext;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

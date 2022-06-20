@@ -1,4 +1,6 @@
 global using BlazorFullStack.Shared;
+global using Microsoft.EntityFrameworkCore;
+using BlazorFullStack.Server.BaseDatos;
 using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddDbContext<BaseDatosContext>(options =>
+    options.UseSqlServer(builder.Configuration
+     .GetConnectionString("DefaultConnection"))
+);
 
 var app = builder.Build();
 

@@ -26,7 +26,7 @@
                 <td> @Heroe.FirstName </td>
                 <td> @Heroe.LastName </td>
                 <td> @Heroe.HeroName </td>
-                <td> @Heroe?.Comic.Name </td>
+                @*<td> @Heroe?.Comic.Name </td>*@  @* SOLUCIONAR ESTO *@
                 <td>
                     <button 
                         class="btn btn-primary"
@@ -47,7 +47,9 @@
     //Apenas se carga nuestro componente, hace la peticion http para traer a todos los heroes
     protected override async Task OnInitializedAsync()
     {
-        await SuperHeroesService.GetSuperHeroes();
+         await SuperHeroesService.GetSuperHeroes();
+
+
     }
 
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BlazorFullStack.Server.BaseDatos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlazorFullStack.Server.Controllers
@@ -7,42 +8,23 @@ namespace BlazorFullStack.Server.Controllers
     [ApiController]
     public class SuperHeroController : ControllerBase
     {
-
-        ///  DATOS MOCKEADOS
-        public static List<Comic> Comics = new List<Comic> { 
-        
-            new Comic { Id = 1, Name = "Marvel"},
-            new Comic { Id = 2, Name ="DC"}
-        };
-
-        public static List<SuperHero> Heroes = new List<SuperHero>
+        // Constructor
+        private readonly BaseDatosContext _context;
+        public SuperHeroController(BaseDatosContext BaseDatosContext)
         {
-            new SuperHero { 
-                Id = 1, 
-                FirstName="Peter", 
-                LastName="Parker",
-                HeroName="Spider-Man",
-                Comic= Comics[0],
-                ComicId=Comics[0].Id
-            },
-            new SuperHero {
-                Id = 2,
-                FirstName="Bruce",
-                LastName="Wayne",
-                HeroName="Batman",
-                Comic= Comics[1],
-                ComicId=Comics[1].Id
-            },
-        };
-        ///  DATOS MOCKEADOS
+            this._context = BaseDatosContext;
+        }
 
 
         [HttpGet]
         public async Task<ActionResult<List<SuperHero>>> GetSuperHeroes()
         {
 
+
+            List<SuperHero> heroes = await this._context.SuperHeroesEntity.ToListAsync();
+
             // Retorna un status 200 con Herores
-            return Ok(Heroes);
+            return Ok(heroes);
        
             // Mientras que apra devovler un status 400, seria BadRequest()
             // Mientras que apra devovler un status 404, seria NotFound()
@@ -51,7 +33,11 @@ namespace BlazorFullStack.Server.Controllers
         [HttpGet("comics")]
         public async Task<ActionResult<List<Comic>>> GetComics()
         {
-            return Ok(Comics);
+
+
+            List<Comic> comics = await this._context.ComicsEntity.ToListAsync();
+
+            return Ok(comics);
         }
 
 
@@ -60,7 +46,11 @@ namespace BlazorFullStack.Server.Controllers
         public async Task<ActionResult<SuperHero>> GetOneHero( int Id)
         {
 
-            SuperHero Heroe = Heroes.FirstOrDefault(heroe => heroe.Id == Id);
+            // Nota no entiendo los metodos q brinda Entity.
+            SuperHero Heroe = await this._context.SuperHeroesEntity
+                .Include(heroe => heroe.Comic)
+                .FirstOrDefaultAsync(heroe => heroe.Id == Id);
+
 
             if (Heroe == null)
             {

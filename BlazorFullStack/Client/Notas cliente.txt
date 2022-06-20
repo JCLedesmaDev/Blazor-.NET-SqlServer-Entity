@@ -28,15 +28,6 @@
 
 2) Ir a _Imports.razor y escribir: @using BlazorFullStack.Client.Services.SuperHeroes
    Esto es con el fin de que nuestro servicio este disponible para todo el proyecto
-
-
-   -------> IActionResult y ActionResult<>: <---------------
-
-   Task<ActionResult<>>: Se utiliza para las acciones asincronas ya que
-    permite especificar que tipo de dato nos devolvera como respuesta. 
-
-    Task<IActionResult>: Devuelve los estados de respuesta de las peticiones HTTP.
-    Es decor: Status 200, 400, etc...
  
 
    -------> Ciclo de vida de los componentes: <---------------
@@ -73,21 +64,6 @@ NavigationManager.NavigateTo($"hero/{Id}");
 --> En este caso, nos re dirige hacia la pagina "/hero/{Id: int}"
 
 
--------> SQL Server: <---------------
-Instalar SQL Server Express desde:
-https://www.microsoft.com/es-es/sql-server/sql-server-downloads
-
-Una vez instalado, debemos continuar con la instalacion de los paquetes
-NuGet en nuestros proyectos
-Seleccionaremos el proyecto ".Server" > Click derecho >
-Manage NuGet Packages y buscaremos los siguientes paquetes:
-- microsoft.entityFrameworkCore
-- microsoft.entityFrameworkCore.design 
-- microsoft.entityFrameworkCore.sqlServer
-
-Tendremos que abrir la consola del administrador de paquetes yendo a
-Herramientas > Administrador de paquetes NuGet > Consola administrador de paquetes.
-con el fin de instalar el paquete de entidad
 
 
 

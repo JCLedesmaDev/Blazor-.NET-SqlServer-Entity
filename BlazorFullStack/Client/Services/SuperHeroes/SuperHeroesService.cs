@@ -44,16 +44,17 @@ namespace BlazorFullStack.Client.Services.SuperHeroes
             throw new Exception("Heroe no encontrado");
         }
 
-        public async Task GetSuperHeroes()
+        public  async Task GetSuperHeroes()
         {
             /// NOTA: Aputa al nombre del controller del back, no importa mayusculas o minusculas.
             /// NOTA 2: Tuvimos que importar using System.Net.Http.Json;
             List<SuperHero> result = await this.http.GetFromJsonAsync
                 <List<SuperHero>>("/api/superhero");
 
+
             if (result != null)
             {
-               Heroes = result;
+                Heroes = result;
             }
         }
     }

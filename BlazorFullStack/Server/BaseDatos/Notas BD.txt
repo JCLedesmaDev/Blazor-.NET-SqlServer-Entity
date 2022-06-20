@@ -1,0 +1,122 @@
+﻿-------> SQL Server: <---------------
+Instalar SQL Server Express desde:
+https://www.microsoft.com/es-es/sql-server/sql-server-downloads
+
+Una vez instalado, debemos continuar con la instalacion de los paquetes
+NuGet en nuestros proyectos
+Seleccionaremos el proyecto ".Server" > Click derecho >
+Manage NuGet Packages y buscaremos los siguientes paquetes:
+- microsoft.entityFrameworkCore
+- microsoft.entityFrameworkCore.design 
+- microsoft.entityFrameworkCore.sqlServer
+
+Tendremos que abrir la consola del administrador de paquetes yendo a
+Herramientas > Administrador de paquetes NuGet > Consola administrador de paquetes.
+
+En caso de que nos surja algun tipo de error, deberemos instalar desde la consola
+las herramientas de linea de comando que nos brinda Entity. Por ello escribiremos:
+dotnet tool install --global dotnet-ef
+(Para comprobar que nos instalo todo, escribiremos el cando 'dotnet-ef')
+
+
+
+-------> DB Context: <---------------
+Cuando creamos la carpeta o proyecto de Base de Datos,
+debemos crear una clase que sea el Contexto de nuestra BD.
+
+Aqui se conectaran todas las clases/tablas que utilizaremos
+en el proyecto.
+
+1) Cuando creamos la clase DBContext, debemos indicar
+que heredara el DbContext proveniente del EntityFrameworkCore
+Por ejem.: 
+public class BaseDatosContext: DbContext {}
+
+2) Debemos agregar el @using del entityFrameworkCore dentro
+de nuestro Service > Program.cs
+global using Microsoft.EntityFrameworkCore;
+De esta manera, ya no nos aparecera en rojo el "DbContext"
+y podremos utilizar el mismo using de manera global en todo el
+proyecto en cuestion. 
+
+
+3) Inicializamos el constructor de nuestra clase para configurar nuestro
+DbContext y que podamos utilizar todas las funcionalidades que nos brinda
+dentro de nuestro proyecto.
+Por ejemplo.:
+  public BaseDatosContext(
+      DbContextOptions<BaseDatosContext> options
+  ) : base(options)
+  {
+
+  }
+
+4) Para conectar todas las clases a nuestro DbContext y que de esta 
+manera, podamos definir las Entidades que tendra nuestro proyecto,
+deberemos utilizar una propiedad del DbContext y escribir lo siguiente
+public DbSet<NombreClase> NombreEntidad/Tabla {get; set;};
+
+Por ejem.:
+   public DbSet<Comic> ComicsEntity { get; set; }
+   public DbSet<SuperHero> SuperHeroesEntity { get; set; }
+     
+
+5) Para poder asignarle datos por defecto a nuestra Base de Datos 
+(es decir, cuando apenas arranque, tenga datos ya cargados), deberemos hacer
+lo siguiente:
+protected override void OnModelCreating(ModelBuilder modelBuilder){
+
+    // Definimos a la Entidad que le vamos a cargar datos mockeados.
+    modelBuilder.Entity<Comic>().HasData(    
+       new Comic { Id = 1, Name = "Marvel"},
+       new Comic { Id = 2, Name ="DC"}
+    );
+
+    modelBuilder.Entity<SuperHero>().HasData(
+        new SuperHero { 
+            Id = 1, 
+            FirstName="Peter", 
+            LastName="Parker",
+            HeroName="Spider-Man",
+            ComicId=1
+        },
+        new SuperHero {
+            Id = 2,
+            FirstName="Bruce",
+            LastName="Wayne",
+            HeroName="Batman",
+            ComicId=2
+        },
+    );
+}
+
+
+6) Configurar la cadena de conexion de la BD dentro del Server > appsetting.json
+para ello pegaremos el siguiente codigo dentro del archivo:
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost\\SqlExpress; Database='nombreBDCambiar'; Trusted_Connection=true;"
+  },
+
+
+7) Reegistramos la conexion de nuestra BD dentro del Service > Program.cs, escribiendo
+lo siguiente:
+builder.Services.AddDbContext<'NombreDbContext'>(options =>
+    options.UseSqlServer(builder.Configuration
+     .GetConnectionString("DefaultConnection"))
+)
+
+8) Comandos comunes para utilziar la BD:
+
+1) Relizar la Migracion de la BD
+
+-> Deberemos ir al directorio de nuestro proyecto Server con
+   cd .\BlazorFullStack\server
+-> Para luego ejecutar el comando: 
+   dotnet ef migrations add 'nombre'
+
+2) Actualizar la BD y/o Crear las respectivas tablas de la BD:
+-> Escribir el comando
+   dotnet ef database update
+
+https://www.youtube.com/watch?v=K_P-qJj_8Bg&t=3003s
+1h 14m
