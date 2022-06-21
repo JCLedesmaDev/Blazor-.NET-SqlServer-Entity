@@ -26,7 +26,7 @@
                 <td> @Heroe.FirstName </td>
                 <td> @Heroe.LastName </td>
                 <td> @Heroe.HeroName </td>
-                @*<td> @Heroe?.Comic.Name </td>*@  @* SOLUCIONAR ESTO *@
+                <td> @Heroe?.Comic.Name </td>  
                 <td>
                     <button 
                         class="btn btn-primary"
@@ -40,6 +40,7 @@
     </tbody>
 </table>
 
+<button class="btn btn-primary" @onclick="CreateNewHero"> Agregar Heroe </button>
 
 @code {
     //Aqui ejecutamos todo nuestro codigo de logica
@@ -47,9 +48,7 @@
     //Apenas se carga nuestro componente, hace la peticion http para traer a todos los heroes
     protected override async Task OnInitializedAsync()
     {
-         await SuperHeroesService.GetSuperHeroes();
-
-
+        await SuperHeroesService.GetSuperHeroes();
     }
 
 
@@ -58,5 +57,10 @@
         NavigationManager.NavigateTo($"hero/{Id}");
     }
 
+
+    void CreateNewHero()
+    {
+        NavigationManager.NavigateTo("hero");
+    }
 }
  

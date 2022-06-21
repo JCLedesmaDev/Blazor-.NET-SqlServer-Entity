@@ -67,6 +67,7 @@ Esta pagina tendra 2 posibles parametros
     <br />
     
     <button type="submit" class="btn btn-primary">@btnText</button>
+    <button type="button" class="btn btn-danger" @onclick="DeleteHero">Eliminar Heroe</button>
 
 </EditForm>
 
@@ -108,7 +109,9 @@ Esta pagina tendra 2 posibles parametros
     {
         if (IdHero == null)
         {
-            // Crear un nuevo heroe
+
+            hero.Comic = SuperHeroesService.Comics[0];
+            hero.ComicId = hero.Comic.Id;
 
         }
         else
@@ -120,6 +123,20 @@ Esta pagina tendra 2 posibles parametros
 
     async Task HandleSubmit()
     {
-        
+        if(IdHero == null)
+        {
+            // Crear un nuevo heroe
+            await SuperHeroesService.CreateSuperHero(hero);
+        }
+        else
+        {
+            await SuperHeroesService.UpdateSuperHero(hero);
+        }
     }
+
+    async Task DeleteHero()
+    {
+        await SuperHeroesService.DeleteSuperHero(hero.Id);
+    }
+
 }

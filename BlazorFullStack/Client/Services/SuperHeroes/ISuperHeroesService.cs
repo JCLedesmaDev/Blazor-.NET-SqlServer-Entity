@@ -15,6 +15,12 @@
 
         Task GetSuperHeroes();
         
-        Task<SuperHero> GetOneHero(int Id);    
+        Task<SuperHero> GetOneHero(int Id);
+
+        Task CreateSuperHero(SuperHero hero);
+
+        Task DeleteSuperHero(int Id);
+
+        Task UpdateSuperHero(SuperHero hero);
     }
 }

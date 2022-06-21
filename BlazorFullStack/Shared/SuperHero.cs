@@ -16,8 +16,6 @@ namespace BlazorFullStack.Shared
         public string LastName { get; set; } = string.Empty;
         public string HeroName { get; set; } = string.Empty;
 
-        public int DNI { get; set; }
-
         public Comic? Comic { get; set; }
         public int ComicId { get; set; }
     }

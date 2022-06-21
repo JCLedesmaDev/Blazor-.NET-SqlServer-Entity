@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using Microsoft.AspNetCore.Components;
+using System.Net.Http.Json;
 
 namespace BlazorFullStack.Client.Services.SuperHeroes
 {
@@ -10,9 +11,12 @@ namespace BlazorFullStack.Client.Services.SuperHeroes
 
         /// Inyectamos e inicializamos en nuestra clase, el servicio http
         private readonly HttpClient http;
-        public SuperHeroesService(HttpClient http)
+        private readonly NavigationManager navigationManager;
+
+        public SuperHeroesService(HttpClient http, NavigationManager navigationManager)
         {
             this.http = http;
+            this.navigationManager = navigationManager;
         }
 
 
@@ -56,6 +60,39 @@ namespace BlazorFullStack.Client.Services.SuperHeroes
             {
                 Heroes = result;
             }
+        }
+
+        public async Task CreateSuperHero(SuperHero hero)
+        {
+            // Obtenemos una respuesta Http.
+            HttpResponseMessage result = await this.http.PostAsJsonAsync("/api/superhero", hero);
+
+            await SetListHeroes(result);
+        }
+        
+        public async Task DeleteSuperHero(int Id)
+        {
+            // Obtenemos una respuesta Http.
+            HttpResponseMessage result = await this.http.DeleteAsync($"/api/superhero/{Id}");
+
+            await SetListHeroes(result);
+        }
+
+        public  async Task UpdateSuperHero(SuperHero hero)
+        {
+            // Obtenemos una respuesta Http.
+            HttpResponseMessage result = await this.http.PutAsJsonAsync($"/api/superhero/{hero.Id}", hero);
+
+            await SetListHeroes(result);
+        }
+
+
+        private async Task SetListHeroes(HttpResponseMessage result)
+        {
+            // Obtenemos los datos json que nos da la respuesta http.
+            var response = await result.Content.ReadFromJsonAsync<List<SuperHero>>();
+            Heroes = response;
+            this.navigationManager.NavigateTo("superHeroes");
         }
     }
 }
