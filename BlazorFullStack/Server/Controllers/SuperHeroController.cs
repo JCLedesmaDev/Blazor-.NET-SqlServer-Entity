@@ -12,7 +12,7 @@ namespace BlazorFullStack.Server.Controllers
         private readonly BaseDatosContext _context;
         public SuperHeroController(BaseDatosContext BaseDatosContext)
         {
-            this._context = BaseDatosContext;
+            _context = BaseDatosContext;
         }
 
 
@@ -21,7 +21,7 @@ namespace BlazorFullStack.Server.Controllers
         {
 
 
-            List<SuperHero> heroes = await this._context.SuperHeroesEntity
+            List<SuperHero> heroes = await _context.SuperHeroesEntity
                 .Include(sh => sh.Comic)
                 .ToListAsync();
 
@@ -37,7 +37,7 @@ namespace BlazorFullStack.Server.Controllers
         {
 
 
-            List<Comic> comics = await this._context.ComicsEntity.ToListAsync();
+            List<Comic> comics = await _context.ComicsEntity.ToListAsync();
 
             return Ok(comics);
         }
@@ -49,7 +49,7 @@ namespace BlazorFullStack.Server.Controllers
         {
 
             // Nota no entiendo los metodos q brinda Entity.
-            SuperHero Heroe = await this._context.SuperHeroesEntity
+            SuperHero? Heroe = await _context.SuperHeroesEntity
                 .Include(heroe => heroe.Comic) // Incluye el comic al que pertenece pero no comprendo la relacion.
                 .FirstOrDefaultAsync(heroe => heroe.Id == Id);
 
@@ -72,9 +72,9 @@ namespace BlazorFullStack.Server.Controllers
         [HttpPost()]
         public async Task<ActionResult<List<SuperHero>>> CreateSuperHero(SuperHero heroe)
         {
-            //heroe.Comic = null
-            this._context.SuperHeroesEntity.Add(heroe);
-            await this._context.SaveChangesAsync();
+            heroe.Comic = null;
+            _context.SuperHeroesEntity.Add(heroe);
+            await _context.SaveChangesAsync();
 
 
             /// Verificamos que se haya agregado el heroe en la BD
@@ -83,18 +83,22 @@ namespace BlazorFullStack.Server.Controllers
         private async Task<ActionResult<List<SuperHero>>> GetDbHeores() {
 
 
-            return await this._context.SuperHeroesEntity
+            return await _context.SuperHeroesEntity
                 .Include(superheroe => superheroe.Comic)
                 .ToListAsync();
 
         }
 
 
-        [HttpPut("{Id}")]
+            /// Nota: El 1er parametro es el que pasamos comun
+            /// Mientras que el 2do parametros es el que le pasamos por la URL
+            /// el nombre del parametro debe coincidir con lo Definido en la linea 93
+        [HttpPut("{IdParam}")]
         public async Task<ActionResult<List<SuperHero>>> UpdateSuperHero(SuperHero hero, int IdParam)
         {
-            //heroe.Comic = null
-            SuperHero DbHeroe = await this._context.SuperHeroesEntity
+           
+
+            SuperHero? DbHeroe = await _context.SuperHeroesEntity
               .Include(heroe => heroe.Comic) // Incluye el comic al que pertenece pero no comprendo la relacion.
               .FirstOrDefaultAsync(heroe => heroe.Id == IdParam);
 
@@ -103,12 +107,14 @@ namespace BlazorFullStack.Server.Controllers
                 return NotFound("No se pudo encontrar a este Heroe");
             }
 
+            
             DbHeroe.FirstName = hero.FirstName;
             DbHeroe.LastName = hero.LastName;
             DbHeroe.HeroName = hero.HeroName;
+
             DbHeroe.ComicId = hero.ComicId;
 
-            await this._context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return Ok(await GetDbHeores());
         }
@@ -116,11 +122,11 @@ namespace BlazorFullStack.Server.Controllers
 
 
 
-        [HttpDelete("{Id}")]
+        [HttpDelete("{IdParam}")]
         public async Task<ActionResult<List<SuperHero>>> DeleteSuperHero( int IdParam)
         {
             //heroe.Comic = null
-            SuperHero DbHeroe = await this._context.SuperHeroesEntity
+            SuperHero? DbHeroe = await _context.SuperHeroesEntity
               .Include(heroe => heroe.Comic) // Incluye el comic al que pertenece pero no comprendo la relacion.
               .FirstOrDefaultAsync(heroe => heroe.Id == IdParam);
 
@@ -131,9 +137,9 @@ namespace BlazorFullStack.Server.Controllers
             }
 
            
-            this._context.SuperHeroesEntity.Remove(DbHeroe);
+            _context.SuperHeroesEntity.Remove(DbHeroe);
 
-            await this._context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return Ok(await GetDbHeores());
         }
