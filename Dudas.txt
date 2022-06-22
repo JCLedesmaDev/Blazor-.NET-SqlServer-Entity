@@ -1,0 +1,8 @@
+--> Como hacer para depurar en el Front con Blazor
+---> Todas las relaciones de la BD (metodos q puedo ejecutar con el DbContext )   https://www.youtube.com/watch?v=FHx6AGVF_IE
+--> El uso de:
+	HttpResponseMessage result = await this.http.PutAsJsonAsync($"/api/superhero/{hero.Id}", hero);
+	var response = await result.Content.ReadFromJsonAsync<List<SuperHero>>();
+	Heroes = response
+
+	PD: Tira error.

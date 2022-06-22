@@ -27,7 +27,7 @@ namespace BlazorFullStack.Client.Services.SuperHeroes
 
         public async Task GetComics()
         {
-            List<Comic> result = await this.http.GetFromJsonAsync
+            List<Comic>? result = await this.http.GetFromJsonAsync
                <List<Comic>>($"/api/superhero/comics");
 
             if (result != null)

@@ -9,6 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorFullStack.Client", "B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorFullStack.Shared", "BlazorFullStack\Shared\BlazorFullStack.Shared.csproj", "{75399326-4F47-4496-9D76-2FA1599EF720}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{0EA2EB60-FC68-4476-A49C-6F4BAD492C53}"
+	ProjectSection(SolutionItems) = preProject
+		Dudas.txt = Dudas.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
